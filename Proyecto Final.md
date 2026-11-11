@@ -1,6 +1,10 @@
 # INFORME DE FIN DE UNIDAD
 
-## Universidad Nacional de Loja
+
+<img width="2362" height="795" alt="image" src="https://github.com/user-attachments/assets/f5b64071-971c-40ae-a4b0-8bdf64b9c5f3" />
+
+
+
 **Facultad de la Energía, las Industrias y los Recursos Naturales No Renovables**
 
 **Carrera:** Computación
