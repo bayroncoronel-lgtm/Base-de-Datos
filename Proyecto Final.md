@@ -1,11 +1,11 @@
-# INFORME DE FIN DE UNIDAD
 
 
 <img width="2362" height="795" alt="image" src="https://github.com/user-attachments/assets/a66709da-6b2b-400a-adcf-1a93c58d9fac" />
 
 
+# INFORME DE FIN DE UNIDAD
 
-# **Facultad de la Energía, las Industrias y los Recursos Naturales No Renovables**
+**Facultad de la Energía, las Industrias y los Recursos Naturales No Renovables**
 
 **Carrera:** Computación
 
