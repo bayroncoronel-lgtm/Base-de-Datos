@@ -470,6 +470,6 @@ ORDER BY total_vendido DESC;
 
 [1] R. Ramakrishnan, "Relational algebra," Database Management Systems, Module 3, Lecture 1, notas de clase, CS 143, Univ. of California, Los Angeles, otoño 2009. Accedido: 10 nov. 2026. [En línea]. Disponible: https://web.cs.ucla.edu/classes/fall09/cs143/notes/RA.pdf 
 
-[2] M. Balazinska, "Lecture 18: Relational algebra," Introduction to Database Systems, CSE 444, Univ. of Washington, otoño 2010. Accedido: 10 nov. 2026. [En línea]. Disponible: https://courses.cs.washington.edu/courses/cse444/10au/lectures/lecture18.pdf
+[2] M. T. Özsu, "Relational algebra," notas de clase, CS 348 Introduction to Database Management, Cheriton School of Computer Science, Univ. of Waterloo, otoño 2012. Accedido: 10 nov. 2026. [En línea]. Disponible: https://cs.uwaterloo.ca/~tozsu/courses/CS338/notes/4a-algebra-handout-notes.pdf 
 
- [3] "Relational algebra," Database Design and Implementation, CS 645, Univ. of Massachusetts Amherst, 2024. Accedido: 10 nov. 2026. [En línea]. Disponible: https://reverie.cs.umass.edu/courses/645/s2024/lectures/RelationalAlgebra.pdf 
+[3] T. Schwarz, "Algebraic and logical query languages," diapositivas de clase, Marquette Univ., Milwaukee, WI, EE. UU., 2025. Accedido: 10 nov. 2026. [En línea]. Disponible: https://tschwarz.mscs.mu.edu/Classes/DB25/Presentations/algebraic.pdf 
