@@ -19,4 +19,4 @@ El presente informe corresponde al trabajo desarrollado durante la primera unida
 
 **Estudiante:** Bayron Alexander Coronel Sarango
 
-**Fecha:** 09 de noviembre de 2026
+**Fecha:** 10 de noviembre de 2026
