@@ -171,6 +171,8 @@ CREATE TABLE PROMOCION (
 
 ## 5.2. Inserción de Datos (DML)
 
+### Categoria
+
 INSERT INTO CATEGORIA (nombre, descripcion) VALUES
 
 ('Micheladas', 'Micheladas clasicas y especiales'),
@@ -185,7 +187,7 @@ INSERT INTO CATEGORIA (nombre, descripcion) VALUES
 
 
 
-
+### Producto
  
  
 INSERT INTO PRODUCTO (id_categoria, nombre, descripcion, precio_venta, estado) VALUES
@@ -212,7 +214,7 @@ INSERT INTO PRODUCTO (id_categoria, nombre, descripcion, precio_venta, estado) V
  
 
 
-
+### Ingrediente
 
 
  
