@@ -235,3 +235,241 @@ INSERT INTO INGREDIENTE (nombre, unidad_medida, stock_actual, stock_minimo, esta
 ('Chamoy', 'litro', 2.50, 1.00, TRUE),
 
 ('Camaron', 'kg', 0.25, 0.50, TRUE);
+
+
+
+## CONSULTA DE ÁLGEBRA RELACIONAL Y TRADUCIR A SQL
+
+### Consulta 1 — Unión (∪)
+
+### Descripción: 
+
+Obtener un directorio único de contactos (nombre, teléfono y correo) que reúna a todos los clientes y a los proveedores activos. Se usa un renombrado (ρ) para que las dos relaciones tengan los mismos nombres de atributos [1] [2].
+
+### Álgebra Relacional:
+
+ρ nombre←nombres ( π nombres, telefono, correo (Cliente) )
+
+   ∪
+   
+π nombre, telefono, correo ( σ estado = TRUE (Proveedor) )
+
+### SQL:
+
+SELECT nombres AS nombre, telefono, correo
+
+FROM   Cliente
+
+UNION
+
+SELECT nombre, telefono, correo
+
+FROM   Proveedor
+
+WHERE  estado = TRUE
+
+ORDER BY nombre;
+
+### Resultado esperado: 
+
+10 registros en total conformados por los 6 clientes y los 4 proveedores activos. Mariscos del Pacífico no aparece porque está inactivo.
+
+
+
+<img width="975" height="614" alt="image" src="https://github.com/user-attachments/assets/4c430d12-7323-4390-b92e-5e02b2008e46" />
+
+
+
+
+## Consulta 2 — Reunión natural (⋈)
+
+### Descripción: 
+
+Listar el detalle de los pedidos ya entregados, mostrando el cliente, la fecha, el producto, la cantidad y el subtotal. Combina Pedido, Cliente, DetallePedido y Producto mediante sus llaves foráneas [1] [2].
+
+### Álgebra Relacional:
+
+π c.nombres, c.apellidos, pe.id_pedido, pe.fecha_pedido, pr.nombre, dp.cantidad, dp.subtotal
+
+   ( σ pe.estado = 'Entregado'
+   
+      ( ( ( Pedido pe ⋈ pe.id_cliente = c.id_cliente Cliente c )
+      
+            ⋈ pe.id_pedido = dp.id_pedido DetallePedido dp )
+            
+            ⋈ dp.id_producto = pr.id_producto Producto pr ) )
+
+### SQL:
+
+SELECT c.nombres, c.apellidos, pe.id_pedido, pe.fecha_pedido,
+
+       pr.nombre AS producto, dp.cantidad, dp.subtotal
+       
+FROM   Pedido pe
+
+JOIN   Cliente c        ON pe.id_cliente = c.id_cliente
+
+JOIN   DetallePedido dp ON pe.id_pedido = dp.id_pedido
+
+JOIN   Producto pr      ON dp.id_producto = pr.id_producto
+
+WHERE  pe.estado = 'Entregado'
+
+ORDER BY pe.fecha_pedido;    
+
+### Resultado esperado: 
+
+10 filas, una por cada producto de los pedidos entregados (1, 2, 3, 6 y 8). Por ejemplo, Ana Perez con 2 Michelada clasica por 7.00. Quedan fuera los pedidos pendiente, en preparación y cancelado.
+
+
+
+
+<img width="975" height="469" alt="image" src="https://github.com/user-attachments/assets/cfbd517c-2345-4f3b-88e0-6eec87c1f7ef" />
+
+
+
+
+## Consulta 3 — Diferencia (−)
+
+### Descripción: 
+
+Encontrar los productos que nunca se han vendido. Al conjunto de todos los productos se le restan los que aparecen en algún detalle de pedido [1] [2].
+
+### Álgebra Relacional:
+
+π id_producto, nombre (Producto)
+
+   −
+   
+π id_producto, nombre (Producto ⋈ DetallePedido)
+
+### SQL:
+
+SELECT id_producto, nombre
+
+FROM   Producto
+
+WHERE  id_producto NOT IN (SELECT id_producto
+
+                           FROM   DetallePedido);
+
+### Resultado esperado: 
+
+1 registro, Cerveza artesanal (id 6), que es el único producto que no aparece en ningún pedido.
+
+
+
+<img width="820" height="306" alt="image" src="https://github.com/user-attachments/assets/138fc246-3f2f-45d1-acd3-2a4501bfcca0" />
+
+
+
+## Consulta 4 — Intersección (∩)
+
+### Descripción: 
+
+Obtener los ingredientes que tienen en común la Michelada clásica (id 1) y la Michelada especial (id 2). Se intersectan los ingredientes de la receta de cada una y luego se une con Ingrediente para mostrar el nombre [1] [2].
+
+### Álgebra Relacional:
+
+π nombre ( Ingrediente ⋈
+
+    ( π id_ingrediente ( σ id_producto = 1 (ProductoIngrediente) )
+    
+         ∩
+         
+      π id_ingrediente ( σ id_producto = 2 (ProductoIngrediente) ) ) )
+
+### SQL:
+
+SELECT i.nombre
+
+FROM   Ingrediente i
+
+WHERE  i.id_ingrediente IN (SELECT id_ingrediente
+
+                            FROM   ProductoIngrediente
+                            
+                            WHERE  id_producto = 1)
+                            
+AND    i.id_ingrediente IN (SELECT id_ingrediente
+
+                            FROM   ProductoIngrediente
+                            
+                            WHERE  id_producto = 2);
+
+### Resultado esperado: 
+
+3 registros de Cerveza, Limon y Sal. Son los ingredientes que llevan ambas micheladas. La salsa inglesa es solo de la clásica, y el clamato y el chamoy solo de la especial.
+
+
+
+<img width="949" height="478" alt="image" src="https://github.com/user-attachments/assets/279dde50-2bca-41f5-b218-1db0ac608121" />
+
+
+
+## Consulta 5 — Agrupamiento y agregación (γ)
+
+### Descripción: 
+
+Calcular, por producto, las unidades vendidas y el total vendido en pedidos entregados, mostrando solo los productos con ventas de 5 dólares o más, del que más vendió al que menos [3].
+
+### Álgebra Relacional:
+
+σ total_vendido >= 5
+
+   ( γ pr.nombre ; SUM(dp.cantidad) → unidades_vendidas, SUM(dp.subtotal) → total_vendido
+   
+        ( σ pe.estado = 'Entregado'
+        
+             ( ( DetallePedido dp ⋈ dp.id_pedido = pe.id_pedido Pedido pe )
+             
+                  ⋈ dp.id_producto = pr.id_producto Producto pr ) ) )
+
+### SQL:
+
+SELECT   pr.nombre AS producto,
+
+         SUM(dp.cantidad) AS unidades_vendidas,
+         
+         SUM(dp.subtotal) AS total_vendido
+         
+FROM     DetallePedido dp
+
+JOIN     Pedido pe   ON dp.id_pedido = pe.id_pedido
+
+JOIN     Producto pr ON dp.id_producto = pr.id_producto
+
+WHERE    pe.estado = 'Entregado'
+
+GROUP BY pr.id_producto, pr.nombre
+
+HAVING   SUM(dp.subtotal) >= 5
+
+ORDER BY total_vendido DESC;
+
+### Resultado esperado: 
+
+3 registros de Michelada clasica (5 unidades, 17.50), Cerveza nacional (5 unidades, 10.00) y Michelada de mango (1 unidad, 5.00). Los demás productos no llegan a 5 dólares y los filtra el HAVING.
+
+
+
+
+<img width="903" height="558" alt="image" src="https://github.com/user-attachments/assets/e44ea062-6578-4828-8757-c6ea5a68396c" />
+
+
+
+# CONCLUSIONES
+
+1.	La elaboración del diagrama entidad-relación y del modelo relacional permitió comprender la importancia de organizar correctamente la información antes de empezar a crear la base de datos. Durante este proceso se identificaron las principales entidades del negocio de mi-cheladas, como productos, ingredientes, pedidos, compras y proveedores, y se estableció cómo se relacionan entre sí. Una de las principales dificultades fue definir correctamente las cardinalidades y las tablas intermedias, especialmente en las relaciones entre productos e ingredientes y entre promociones y productos. También fue necesario corregir algunas rela-ciones y agregar llaves foráneas para mantener la conexión entre las tablas. Con esto se lo-gró organizar la información de manera lógica, evitando datos repetidos y cumpliendo con el primer objetivo específico del proyecto.
+
+2.	La creación de la base de datos en MySQL permitió poner en práctica el diseño realizado anteriormente y comprender cómo se construyen las tablas mediante instrucciones SQL. Durante la implementación se aprendió que es importante respetar el orden de creación de las tablas y de inserción de los datos, debido a que algunas dependen de otras mediante lla-ves foráneas. También se utilizaron restricciones como PRIMARY KEY, FOREIGN KEY y CHECK, que ayudan a mantener la información correcta y evitar errores en los datos regis-trados. Además, se pudo comprender la importancia de elegir adecuadamente los tipos de datos para cada atributo. Finalmente, la implementación permitió comprobar que las tablas y sus relaciones funcionaran correctamente, cumpliendo así con el segundo objetivo especí-fico del proyecto.
+
+3.	El desarrollo de las consultas de álgebra relacional permitió comprender cómo obtener in-formación a partir de los datos almacenados en la base de datos. Mediante operadores como unión, intersección, diferencia, selección, proyección y reunión, fue posible plantear dife-rentes consultas para resolver necesidades del negocio. También se comprendió cómo estos operadores se relacionan con las instrucciones SQL, facilitando la elaboración de consultas sobre varias tablas. Entre los resultados obtenidos se encuentran la identificación de los productos más vendidos, la consulta de los pedidos realizados por los clientes y la identifi-cación de productos que no han tenido ventas. De esta manera, se comprobó que la base de datos no solo sirve para almacenar información, sino también para consultarla y obtener re-sultados que pueden ayudar en la administración del negocio y en la toma de decisiones.
+
+# BIBLIOGRAFÍA
+
+[1] R. Ramakrishnan, "Relational algebra," Database Management Systems, Module 3, Lecture 1, notas de clase, CS 143, Univ. of California, Los Angeles, otoño 2009. Accedido: 10 nov. 2026. [En línea]. Disponible: https://web.cs.ucla.edu/classes/fall09/cs143/notes/RA.pdf 
+
+[2] M. Balazinska, "Lecture 18: Relational algebra," Introduction to Database Systems, CSE 444, Univ. of Washington, otoño 2010. Accedido: 10 nov. 2026. [En línea]. Disponible: https://courses.cs.washington.edu/courses/cse444/10au/lectures/lecture18.pdf
+
+ [3] "Relational algebra," Database Design and Implementation, CS 645, Univ. of Massachusetts Amherst, 2024. Accedido: 10 nov. 2026. [En línea]. Disponible: https://reverie.cs.umass.edu/courses/645/s2024/lectures/RelationalAlgebra.pdf 
