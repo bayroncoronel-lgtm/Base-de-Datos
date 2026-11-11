@@ -472,4 +472,4 @@ ORDER BY total_vendido DESC;
 
 [2] M. T. Özsu, "Relational algebra," notas de clase, CS 348 Introduction to Database Management, Cheriton School of Computer Science, Univ. of Waterloo, otoño 2012. Accedido: 10 nov. 2026. [En línea]. Disponible: https://cs.uwaterloo.ca/~tozsu/courses/CS338/notes/4a-algebra-handout-notes.pdf 
 
-[3] T. Schwarz, "Algebraic and logical query languages," diapositivas de clase, Marquette Univ., Milwaukee, WI, EE. UU., 2025. Accedido: 10 nov. 2026. [En línea]. Disponible: https://tschwarz.mscs.mu.edu/Classes/DB25/Presentations/algebraic.pdf 
+[3] Wikipedia contributors, "Relational algebra," Wikipedia, The Free Encyclopedia. Accedido: 10 nov. 2026. [En línea]. Disponible: https://en.wikipedia.org/wiki/Relational_algebra
