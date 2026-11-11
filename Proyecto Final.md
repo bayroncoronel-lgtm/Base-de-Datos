@@ -66,104 +66,161 @@ Diseñar e implementar una base de datos relacional en MySQL para un negocio ded
 ## 5.1. Creación de Tablas (DDL)
 
 CREATE DATABASE IF NOT EXISTS sistema_micheladas
+
 CHARACTER SET utf8mb4
+
 COLLATE utf8mb4_unicode_ci;
 
 USE sistema_micheladas;
 
 CREATE TABLE CATEGORIA (
+    
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    
     nombre VARCHAR(50) NOT NULL,
+    
     descripcion VARCHAR(150),
+    
     estado BOOLEAN DEFAULT TRUE
+    
 );
 
 CREATE TABLE PRODUCTO (
+
     id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    
     id_categoria INT NOT NULL,
+    
     nombre VARCHAR(100) NOT NULL,
+    
     descripcion VARCHAR(200),
+    
     precio_venta DECIMAL(10,2) NOT NULL,
+    
     estado BOOLEAN DEFAULT TRUE,
 
     FOREIGN KEY (id_categoria)
+    
     REFERENCES Categoria(id_categoria),
 
     CHECK (precio_venta >= 0)
 );
 
 CREATE TABLE INGREDIENTE (
+
     id_ingrediente INT AUTO_INCREMENT PRIMARY KEY,
+    
     nombre VARCHAR(100) NOT NULL,
+    
     unidad_medida VARCHAR(20) NOT NULL,
+    
     stock_actual DECIMAL(10,2) DEFAULT 0,
+    
     stock_minimo DECIMAL(10,2) DEFAULT 0,
+    
     estado BOOLEAN DEFAULT TRUE,
 
     CHECK (stock_actual >= 0),
+    
     CHECK (stock_minimo >= 0)
 );
 
 
 
 CREATE TABLE PRODUCTOINGREDIENTE (
+
     id_producto INT NOT NULL,
+    
     id_ingrediente INT NOT NULL,
+    
     cantidad DECIMAL(10,2) NOT NULL,
 
     PRIMARY KEY (id_producto, id_ingrediente),
 
     FOREIGN KEY (id_producto)
+    
     REFERENCES Producto(id_producto),
 
     FOREIGN KEY (id_ingrediente)
+    
     REFERENCES Ingrediente(id_ingrediente),
 
     CHECK (cantidad > 0)
 );
 
 CREATE TABLE PROMOCION (
+
     id_promocion INT AUTO_INCREMENT PRIMARY KEY,
+    
     nombre VARCHAR(100) NOT NULL,
+    
     descripcion VARCHAR(200),
+    
     tipo_descuento VARCHAR(20) NOT NULL,
+    
     valor_descuento DECIMAL(10,2) NOT NULL,
+    
     fecha_inicio DATE NOT NULL,
+    
     fecha_fin DATE NOT NULL,
 
     CHECK (valor_descuento >= 0),
+    
     CHECK (fecha_fin >= fecha_inicio)
 );
 
 ## 5.2. Inserción de Datos (DML)
 
 INSERT INTO CATEGORIA (nombre, descripcion) VALUES
+
 ('Micheladas', 'Micheladas clasicas y especiales'),
+
 ('Cervezas', 'Cervezas nacionales y artesanales'),
+
 ('Bebidas sin alcohol', 'Gaseosas y aguas'),
+
 ('Snacks', 'Acompanantes para las bebidas'),
+
 ('Combos', 'Promociones de varios productos');
  
  
 INSERT INTO PRODUCTO (id_categoria, nombre, descripcion, precio_venta, estado) VALUES
+
 (1, 'Michelada clasica', 'Cerveza, limon, sal y salsa inglesa', 3.50, TRUE),
+
 (1, 'Michelada especial', 'Con clamato y chamoy', 4.50, TRUE),
+
 (1, 'Michelada de mango', 'Con pulpa de mango y chamoy', 5.00, TRUE),
+
 (1, 'Michelada de camaron', 'Con clamato y camarones', 6.50, TRUE),
+
 (2, 'Cerveza nacional', 'Botella de 355 ml', 2.00, TRUE),
+
 (2, 'Cerveza artesanal', 'Botella de 330 ml', 3.50, FALSE),
+
 (3, 'Gaseosa', 'Botella individual', 1.00, TRUE),
+
 (3, 'Agua mineral', 'Botella de 500 ml', 1.25, TRUE),
+
 (4, 'Papas fritas', 'Porcion individual', 1.50, TRUE),
+
 (5, 'Combo michelada y papas', 'Michelada clasica con papas fritas', 4.50, TRUE);
  
  
 INSERT INTO INGREDIENTE (nombre, unidad_medida, stock_actual, stock_minimo, estado) VALUES
+
 ('Cerveza', 'botella', 60.00, 20.00, TRUE),
+
 ('Limon', 'unidad', 150.00, 40.00, TRUE),
+
 ('Sal', 'kg', 5.00, 2.00, TRUE),
+
 ('Salsa inglesa', 'litro', 3.00, 1.00, TRUE),
+
 ('Clamato', 'litro', 12.00, 5.00, TRUE),
+
 ('Pulpa de mango', 'litro', 0.40, 1.00, TRUE),
+
 ('Chamoy', 'litro', 2.50, 1.00, TRUE),
+
 ('Camaron', 'kg', 0.25, 0.50, TRUE);
