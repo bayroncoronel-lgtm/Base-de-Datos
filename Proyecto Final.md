@@ -1,4 +1,4 @@
-                                                # INFORME DE FIN DE UNIDAD
+# INFORME DE FIN DE UNIDAD
 
 ## Universidad Nacional de Loja
 **Facultad de la Energía, las Industrias y los Recursos Naturales No Renovables**
