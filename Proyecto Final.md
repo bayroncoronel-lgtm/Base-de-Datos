@@ -182,6 +182,10 @@ INSERT INTO CATEGORIA (nombre, descripcion) VALUES
 ('Snacks', 'Acompanantes para las bebidas'),
 
 ('Combos', 'Promociones de varios productos');
+
+
+
+
  
  
 INSERT INTO PRODUCTO (id_categoria, nombre, descripcion, precio_venta, estado) VALUES
@@ -206,6 +210,11 @@ INSERT INTO PRODUCTO (id_categoria, nombre, descripcion, precio_venta, estado) V
 
 (5, 'Combo michelada y papas', 'Michelada clasica con papas fritas', 4.50, TRUE);
  
+
+
+
+
+
  
 INSERT INTO INGREDIENTE (nombre, unidad_medida, stock_actual, stock_minimo, estado) VALUES
 
